@@ -30,8 +30,7 @@ fn main() -> ! {
     let rcc = dp.RCC.constrain(); //Grab clocks
     let clocks = 
         rcc.cfgr.use_hse(8.MHz())
-        .sysclk(180.MHz())
-        .pclk2(90.MHz())
+        .sysclk(84.MHz())
         .freeze(); //Set sysclk compared to external 8Mhz oscillator:
     defmt::info!("Sysclk running at: {}", clocks.sysclk().raw());
 
@@ -51,7 +50,6 @@ fn main() -> ! {
         polarity: spi::Polarity::IdleLow,
         phase: spi::Phase::CaptureOnFirstTransition,
     };
-
     //Setup SPI controller 1
     let mut spi1 = dp.SPI1.spi(
         (sclk, miso, mosi),

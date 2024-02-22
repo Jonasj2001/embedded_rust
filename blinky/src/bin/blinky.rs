@@ -29,7 +29,7 @@ fn main() -> ! {
     let rcc = dp.RCC.constrain(); //Grab clocks
     let clocks = 
         rcc.cfgr.use_hse(8.MHz())
-        .sysclk(180.MHz())
+        .sysclk(84.MHz())
         .freeze(); //Set sysclk compared to external 8Mhz oscillator:
     defmt::info!("Sysclk running at: {}", clocks.sysclk().raw());
 
