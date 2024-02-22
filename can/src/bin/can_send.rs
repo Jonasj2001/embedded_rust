@@ -61,6 +61,7 @@ fn main() -> ! {
     defmt::info!("Can set up");
 
     //Enabler interrupts, så den interrupter når der er en ny besked i fifo0, fifo0 er fuld eller der er overrun
+    //I dette eksempel bliver interrupt ikke bruge :)
     can1.enable_interrupts({
         use bxcan::Interrupts as If;
         If::FIFO0_MESSAGE_PENDING | If::FIFO0_FULL | If::FIFO0_OVERRUN
@@ -75,25 +76,25 @@ fn main() -> ! {
     // Drop filters to leave filter configuration mode.
     drop(filters);
 
-    //CAN must have an ID to determine who sends when
+    //En tilfældig id ＼（〇_ｏ）／
     let id: u16 = 0x500;
 
-    //Some random message
+    //Frame::Data kan håndtere [u8; N], 1<N<=8
     let mut test: [u8; 1] = [0; 1];
-    //let mut test: [u8; 8] = [0; 8];
-    let mut count: u8 = 0;
     defmt::info!("Starting loop");
     loop {
-        test[0] = count;
+        test[0] += 1;
+        //Creates a frame from the id and test
         let test_frame = Frame::new_data(StandardId::new(id).unwrap(), test);
         defmt::info!("Sending frame {:?}", test_frame);
+        //Transmits the frame - ignores error
         block!(can1.transmit(&test_frame)).unwrap();
-        if count < 255 {
-            count += 1;
-        } else {
-            count = 0;
+        //Removes overflow
+        if test[0] >= 255 {
+            test[0] = 1;
         }
 
+        //Delay :P
         for _ in 0..1000000 {
             cortex_m::asm::nop();
         }

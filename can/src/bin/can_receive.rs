@@ -1,4 +1,5 @@
 #![deny(unsafe_code)]
+#![deny(warnings)]
 #![no_main]
 #![no_std]
 
@@ -65,15 +66,13 @@ fn main() -> ! {
     // Drop filters to leave filter configuration mode.
     drop(filters);
 
-    // Echo back received packages in sequence.
-    // See the `can-rtfm` example for an echo implementation that adheres to
-    // correct frame ordering based on the transfer id.
     loop {
+        //Tries to recieve - will do nothing if there is no message
         match can1.receive() {
+            //Tries to extract data from frame - will do nothing if there is no data
             Ok(frame) => match frame.data() {
                 Some(data) => {
-                    defmt::info!("Sending frame {:?}", frame);
-                    //defmt::info!("Data {:?}", data);
+                    defmt::info!("Received frame {:?}", frame);
                     data
                 }
                 None => continue,
