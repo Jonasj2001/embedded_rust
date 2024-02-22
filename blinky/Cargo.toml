@@ -20,5 +20,5 @@ features = ["critical-section-single-core"]
 
 [dependencies.stm32f4xx-hal]
 version = "0.20.0"
-features = ["stm32f446"]
-# features = ["stm32f401"]
+#features = ["stm32f446"]
+features = ["stm32f401"]
