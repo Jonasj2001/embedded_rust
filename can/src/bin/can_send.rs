@@ -30,12 +30,7 @@ fn main() -> ! {
     // External clock på Nucleo F446Re er 8Mhz
     // Gennem PLL bliver denne til 180Mhz
     // CAN hører til periphral clock 1 -> 45MHz for high speed can :D
-    let _clocks = rcc
-        .cfgr
-        .use_hse(8.MHz())
-        .sysclk(180.MHz())
-        .pclk1(45.MHz())
-        .freeze();
+    let _clocks = rcc.cfgr.use_hse(8.MHz()).sysclk(180.MHz()).pclk1(45.MHz());
     defmt::info!("Clocks set up");
 
     //Spkitter GPIOA op i individuelle pins
